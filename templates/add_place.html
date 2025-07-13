@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить место</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style2.css') }}">
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+</head>
+<body>
+    <h2>Добавить интересное место</h2>
+
+    <form action="/add_place" method="POST" enctype="multipart/form-data">
+        <label>Название:</label>
+        <input type="text" name="name" required>
+
+        <label>Адрес:</label>
+        <input type="text" name="address" required>
+
+        <label>Категория:</label>
+        <select name="category" required>
+            <option value="Музей">Музей</option>
+            <option value="Парк">Парк</option>
+            <option value="Кафе">Кафе</option>
+            <option value="Развлечение">Развлечение</option>
+        </select>
+
+        <label>Фото:</label>
+        <input type="file" name="image">
+
+        <label>Выберите место на карте:</label>
+        <div id="map"></div>
+
+
+        <input type="hidden" id="latitude" name="latitude" required>
+        <input type="hidden" id="longitude" name="longitude" required>
+
+        <button type="submit">Сохранить</button>
+    </form>
+
+    <script>
+        ymaps.ready(function () {
+            var map = new ymaps.Map("map", {
+                center: [43.4499, 39.9566], // Центр Сириуса
+                zoom: 13
+            });
+
+            var marker;
+
+            map.events.add('click', function (e) {
+                var coords = e.get('coords');
+                var lat = coords[0].toFixed(6);
+                var lng = coords[1].toFixed(6);
+
+
+                document.getElementById('latitude').value = lat;
+                document.getElementById('longitude').value = lng;
+
+                if (!marker) {
+                    marker = new ymaps.Placemark(coords, {}, { draggable: true });
+                    map.geoObjects.add(marker);
+                } else {
+                    marker.geometry.setCoordinates(coords);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+

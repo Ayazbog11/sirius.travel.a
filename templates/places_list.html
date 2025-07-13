@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список мест</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style1.css') }}">
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>Места на территории Сириуса</h2>
+
+        <div id="map"></div>
+
+        <!-- Форма фильтрации по категориям  !-->
+        <form method="get">
+            <div class="filters">
+                {% for category in all_categories %}
+                    <label>
+                        <input type="checkbox" name="category" value="{{ category }}" {% if category in selected_categories %}checked{% endif %}>
+                        {{ category }}
+                    </label>
+                {% endfor %}
+            </div>
+            <button type="submit">Показать</button>
+        </form>
+
+        <!-- Сетка карточек мест !-->
+        {% if places %}
+        <div class="places-grid">
+            {% for place in places %}
+                <div class="place-card">
+                    {% if place.image %}
+                        <img src="{{ url_for('static', filename='uploads/' ~ place.image) }}" alt="{{ place.name }}">
+                    {% else %}
+                        <div class="no-image">Нет изображения</div>
+                    {% endif %}
+                    <div class="place-info">
+                        <h3>{{ place.name }}</h3>
+                        <p><strong>Категория:</strong> {{ place.category }}</p>
+                        <p><strong>Адрес:</strong> {{ place.address }}</p>
+                        <a href="{{ url_for('place_detail', place_id=place.id) }}" class="btn small">Подробнее</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% else %}
+            <p>Мест пока нет.</p>
+        {% endif %}
+    </div>
+
+    <script>
+        ymaps.ready(function () {
+            var map = new ymaps.Map("map", {
+                center: [43.4499, 39.9566],
+                zoom: 13,
+                controls: ['zoomControl', 'fullscreenControl']
+            });
+
+            var places = {{ places|tojson }};
+
+            places.forEach(function(place) {
+                if (place.latitude && place.longitude) {
+                    var placemark = new ymaps.Placemark([place.latitude, place.longitude], {
+                        balloonContentHeader: '<strong>' + place.name + '</strong>',
+                        balloonContentBody: place.category + '<br>' + place.address,
+                        balloonContentFooter: '<a href="/place/' + place.id + '">Подробнее</a>'
+                    }, {
+                        preset: 'islands#blueDotIcon'
+                    });
+
+                    map.geoObjects.add(placemark);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

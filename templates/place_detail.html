@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ place.name }} — Сириус.Путеводитель</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style4.css') }}">
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+</head>
+<body>
+    <div class="container">
+        {% if place.image %}
+            <img src="{{ url_for('static', filename='uploads/' + place.image) }}" alt="{{ place.name }}" style="width:100%; max-height:400px; object-fit:cover; border-radius:12px;">
+        {% endif %}
+
+        <p><strong>Название:</strong> {{ place.name }}</p>
+        <p><strong>Адрес:</strong> {{ place.address }}</p>
+        <p><strong>Категория:</strong> {{ place.category }}</p>
+        <p><strong>Средняя оценка:</strong>
+            {% if place.average_rating() %}
+                ⭐ {{ place.average_rating() }} / 5
+            {% else %}
+                Нет отзывов
+            {% endif %}
+        </p>
+
+        {% if place.latitude and place.longitude %}
+        <div id="map"></div>
+        <script>
+            ymaps.ready(function () {
+                var map = new ymaps.Map("map", {
+                    center: [{{ place.latitude }}, {{ place.longitude }}],
+                    zoom: 15
+                });
+
+                var placemark = new ymaps.Placemark([{{ place.latitude }}, {{ place.longitude }}], {
+                    balloonContentHeader: "{{ place.name }}",
+                    balloonContentBody: "{{ place.category }}<br>{{ place.address }}"
+                });
+
+                map.geoObjects.add(placemark);
+            });
+        </script>
+        {% endif %}
+
+        <h2>Оставить отзыв</h2>
+        <form method="post">
+            <label for="rating">Оценка:</label>
+            <select name="rating" id="rating" required>
+                <option value="">Выберите оценку</option>
+                {% for i in range(5, 0, -1) %}
+                    <option value="{{ i }}">{{ i }} ★</option>
+                {% endfor %}
+            </select>
+
+            <label for="comment">Комментарий:</label>
+            <textarea name="comment" id="comment" rows="4" placeholder="Поделитесь впечатлением..." required></textarea>
+
+            <button type="submit">Оставить отзыв</button>
+        </form>
+
+        <h2>Отзывы</h2>
+        {% if place.reviews %}
+            {% set reviews = place.reviews|sort(attribute='date', reverse=True) %}
+            {% for review in reviews %}
+                <div class="review {% if loop.index > 3 %}hidden-review{% endif %}">
+                    <div class="rating">Оценка: {{ review.rating }} ★</div>
+                    <div class="date">{{ review.date.strftime('%d.%m.%Y %H:%M') }}</div>
+                    <div class="text">{{ review.comment }}</div>
+                </div>
+            {% endfor %}
+            {% if reviews|length > 3 %}
+                <button id="show-more-btn">Показать все отзывы</button>
+            {% endif %}
+        {% else %}
+            <p>Пока нет отзывов.</p>
+        {% endif %}
+
+        <p><a href="{{ url_for('places_list') }}" class="button">← Назад ко всем местам</a></p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const btn = document.getElementById('show-more-btn');
+            if (btn) {
+                btn.addEventListener('click', function () {
+                    document.querySelectorAll('.hidden-review').forEach(function (el) {
+                        el.style.display = 'block';
+                    });
+                    btn.style.display = 'none';
+                });
+            }
+        });
+    </script>
+
+    <style>
+        .hidden-review {
+            display: none;
+        }
+    </style>
+</body>
+</html>

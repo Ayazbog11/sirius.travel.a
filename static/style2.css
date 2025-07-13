@@ -1,0 +1,42 @@
+body {
+            font-family: sans-serif;
+            padding: 20px;
+            background: linear-gradient(to bottom right, #eef2f3, #d3d3d3);
+        }
+        form {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        #map {
+            height: 400px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+        input, textarea, select {
+            width: 100%;
+            margin: 8px 0;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #3367d6;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }

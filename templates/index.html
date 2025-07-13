@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Сириус.Путеводитель</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="hero-background">
+    <div class="overlay">
+        <h1 class="main-title">Сириус.Путеводитель</h1>
+        <div class="button-group">
+            <a href="{{ url_for('add_place_page') }}" class="btn large">➕ Добавить место</a>
+            <a href="{{ url_for('places_list') }}" class="btn large">📍 Список мест</a>
+        </div>
+    </div>
+</body>
+</html>
