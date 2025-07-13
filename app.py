@@ -92,7 +92,7 @@ def add_place():
     latitude = request.form.get('latitude')
     longitude = request.form.get('longitude')
     image = request.files.get('image')
-
+    description = request.form['description']
     # Сохраняем фото в отдельную папку
     filename = None
     if image:
@@ -104,6 +104,7 @@ def add_place():
         address=address,
         category=category,
         image=filename,
+        description=description,
         latitude=float(latitude) if latitude else None,
         longitude=float(longitude) if longitude else None
     )

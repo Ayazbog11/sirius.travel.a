@@ -15,6 +15,8 @@
         <p><strong>Название:</strong> {{ place.name }}</p>
         <p><strong>Адрес:</strong> {{ place.address }}</p>
         <p><strong>Категория:</strong> {{ place.category }}</p>
+        <p><strong>Описание:</strong></p>
+        <div class="place-description">{{ place.description }}</div>
         <p><strong>Средняя оценка:</strong>
             {% if place.average_rating() %}
                 ⭐ {{ place.average_rating() }} / 5

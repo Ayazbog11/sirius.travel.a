@@ -12,6 +12,7 @@ class Place(db.Model):
     image = db.Column(db.String(120), nullable=True)
     latitude = db.Column(db.Float, nullable=True)
     longitude = db.Column(db.Float, nullable=True)
+    description = db.Column(db.Text, nullable=True)
     reviews = db.relationship('Review', backref='place', lazy=True)
 
     #средняя оценка по отзывам
