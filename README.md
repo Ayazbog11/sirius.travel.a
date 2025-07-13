@@ -1,5 +1,10 @@
+
+для того чтобы проект уместился папка venv была удалена в который были эти улучшения из за этого требуется пройти такую процедуру
+надо написать в терминале(создать виртуальное окружение)
+1)python -m venv venv
+2).\venv\Scripts\Activate
 для того чтобы приложение работало надо скачать библиотеки 
-Flask(pip install flask)
-Flask-SQLAlchemy ( pip install flask_sqlalchemy)
-для того чтобы проект уместился папка venv была удалена в который были эти улучшения
+3)pip install flask)
+4)pip install flask_sqlalchemy)
+
 дальше app.py запускаем и все 
