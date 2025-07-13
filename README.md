@@ -4,7 +4,7 @@
 1)python -m venv venv
 2).\venv\Scripts\Activate
 для того чтобы приложение работало надо скачать библиотеки 
-3)pip install flask)
-4)pip install flask_sqlalchemy)
+3)pip install flask
+4)pip install flask_sqlalchemy
 
 дальше app.py запускаем и все 
